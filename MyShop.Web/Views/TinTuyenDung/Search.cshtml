@@ -1,0 +1,479 @@
+﻿@model MyShop.Web.Models.TinTuyenDungHomeVm
+
+@{
+    ViewBag.Title = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var isAuthenticated = Request.IsAuthenticated ? "1" : "0";
+}
+
+@section footerJS{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#cateListMainSearch").select2().select2('val', '@Model.Industry');
+
+            $("#locationMainSearch").select2().select2('val', '@Model.Location');
+
+        });
+    </script>
+
+    <script src="~/Assets/client/js/controller/tinSearchController.js"></script>
+}
+
+<div id="wrapper" class="main-wrapper">
+    <input id="isAuthenticated" hidden value="@isAuthenticated" />
+    <div id="search-widget-wrapper">
+        <div id="search-widget" class="collapse m-t-md in">
+            <div class="search-form container">
+                <div class="bg-blue">
+                    <span class="close-square"></span>
+                    <div class="row">
+                        <div class="search-widget-area col-sm-11" id="search-box">
+                            <form data-reactroot="">
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="textbox">
+                                                    <span>
+                                                        <input type="text" class="form-control search-all input-lg" placeholder="Nhập chức danh, vị trí, kỹ năng..." autocapitalize="off" autocorrect="off" role="textbox" spellcheck="false" name="keyword" id="txtKeyword" value="@Model.Keyword">
+                                                        <i class="fa fa-close clear-keyword clickable absolute"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-4 cate-search">
+                                                <div class="textbox">
+                                                    <select style="width:100%" id="cateListMainSearch" name="industry">
+                                                        <option value="tat-ca-0" selected>Tất cả ngành nghề</option>
+                                                        @{ Html.RenderAction("Category", "TinTuyenDung");}
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-4 level-search">
+                                                <div class="textbox">
+                                                    <select style="width:100%" id="locationMainSearch" name="location">
+                                                        <option value="tat-ca-0">Tất cả địa điểm</option>
+                                                        @{ Html.RenderAction("Location", "TinTuyenDung");}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><div class="col-sm-2">
+                                        <button class="btn-search btn btn-lg btn-primary" type="button">
+                                            <i>
+                                            </i>Tìm kiếm
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="category-widget col-sm-1">
+                            <a href="tim-viec-lam.html" target="_blank" title="Xem việc làm theo danh mục" class="btn btn-default btn-outline btn-lg link-white btn-browse-job hidden-xs" data-toggle="tooltip">
+                                <span class="hidden-xs"><span class="icon-list-thin-white"></span></span>
+                            </a>
+                            <a href="tim-viec-lam.html" target="_blank" title="Xem việc làm theo danh mục" class="btn btn-md btn-link btn-browse-job link-white visible-xs">
+                                <span class="visible-xs"><i class="fa fa-lg fa-list-alt"></i> Xem việc làm theo danh mục</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="job-alert-float-banner" class="job-alert-float-banner hidden-xs" hidden="">
+        <form novalidate="novalidate">
+            <div class="clearfix">
+                <img class="pull-left" src="/assets/client/images.vietnamworks.com/img/icon-email.png" width="50" alt="">
+                <input value="" required="" type="email" id="floatBannerJobAlertEmail" name="floatBannerJobAlertEmail" class="form-control pull-left" placeholder="example@gmail.com">
+                <input type="hidden" value="0" id="fromWindow" name="fromWindow">
+                <button id="jobalert_open" type="button" class="btn btn-primary pull-left">Xem các việc đang có</button>
+            </div>
+            <label for="floatBannerJobAlertEmail" class="error" hidden=""></label>
+            <div class="error-message" hidden="">This is an error message</div>
+            <div class="success-message" hidden="">This is a success message</div>
+        </form>
+    </div>
+    <div id="job-search" class="job-search">
+        <div class="container-fluid">
+            <div class="row">
+                <div id="left-column" class="col-sm-3 col-md-3 col-lg-2 job-search__left-column">
+                    <div class="box box-xs">
+                        <h2 class="hidden-xs">Lọc theo</h2>
+                        <div id="facets" class="side-column awe-check">
+                            <div id="categories" class="facet">
+                                <div data-reactroot="" class="ais-root ais-refinement-list ais-root__collapsible">
+                                    <div class="ais-refinement-list--header facet-title ais-header">
+                                        <h5>NGÀNH NGHỀ <i class="fa fa-angle-down pull-right fa-lg"></i></h5>
+                                    </div><div class="ais-body ais-refinement-list--body">
+                                        <div class="ais-refinement-list--list">
+                                            @foreach (var item in Model.ListNganhNghe)
+                                            {
+                                                <div class="ais-refinement-list--item facet-value checkbox clearfix">
+                                                    <div>
+                                                        <input type="checkbox" class="ais-refinement-list--checkbox nganhnghe" value="@item.Id">
+                                                        <label class="ais-refinement-list--label col-sm-12">
+                                                            <span class="text-clip-70" title="@item.Ten">@item.Ten</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="locations" class="facet">
+                                <div data-reactroot="" class="ais-root ais-refinement-list ais-root__collapsible">
+                                    <div class="ais-refinement-list--header facet-title ais-header">
+                                        <h5>ĐỊA ĐIỂM <i class="fa fa-angle-down pull-right fa-lg"></i></h5>
+                                    </div><div class="ais-body ais-refinement-list--body">
+                                        <div class="ais-refinement-list--list">
+                                            @foreach (var item in Model.ListTinh)
+                                            {
+                                                <div class="ais-refinement-list--item facet-value checkbox clearfix">
+                                                    <div>
+                                                        <input type="checkbox" class="ais-refinement-list--checkbox diadiem" value="@item.Id">
+                                                        <label class="ais-refinement-list--label col-sm-12">
+                                                            <span class="text-clip-70" title="@item.Ten">@item.Ten</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="skills" class="facet">
+                                <div data-reactroot="" class="ais-root ais-refinement-list ais-root__collapsible">
+                                    <div class="ais-refinement-list--header facet-title ais-header">
+                                        <h5>KỸ NĂNG <i class="fa fa-angle-down pull-right fa-lg"></i></h5>
+                                    </div><div class="ais-body ais-refinement-list--body">
+                                        <div class="ais-refinement-list--list">
+                                            @foreach (var item in Model.ListKyNang)
+                                            {
+                                                <div class="ais-refinement-list--item facet-value checkbox clearfix">
+                                                    <div>
+                                                        <input type="checkbox" class="ais-refinement-list--checkbox kynang" value="@item.Id">
+                                                        <label class="ais-refinement-list--label col-sm-12">
+                                                            <span class="text-clip-70" title="@item.Ten">@item.Ten</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="jobLeveles" class="facet">
+                                <div data-reactroot="" class="ais-root ais-refinement-list ais-root__collapsible">
+                                    <div class="ais-refinement-list--header facet-title ais-header">
+                                        <h5>CẤP BẬC <i class="fa fa-angle-down pull-right fa-lg"></i></h5>
+                                    </div><div class="ais-body ais-refinement-list--body">
+                                        <div class="ais-refinement-list--list">
+                                            @foreach (var item in Model.ListCapBac)
+                                            {
+                                                <div class="ais-refinement-list--item facet-value checkbox clearfix">
+                                                    <div>
+                                                        <input type="checkbox" class="ais-refinement-list--checkbox capbac" value="@item.Id">
+                                                        <label class="ais-refinement-list--label col-sm-12">
+                                                            <span class="text-clip-70" title="@item.Ten">@item.Ten</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="salaryRange" class="facet">
+                                <div data-reactroot="" class="ais-root ais-refinement-list ais-root__collapsible">
+                                    <div class="ais-refinement-list--header facet-title ais-header">
+                                        <h5>MỨC LƯƠNG <i class="fa fa-angle-down pull-right fa-lg"></i></h5>
+                                    </div>
+                                    <div class="ais-body ais-refinement-list--body">
+                                        <div class="ais-refinement-list--list">
+                                            <div class="ais-refinement-list--item facet-value radio">
+                                                <div>
+                                                    <input type="radio" class="luong" name="jobSalary" value="500">
+                                                    <label class="ais-refinement-list--label col-sm-9 col-md-10">
+                                                        ≤ 500
+                                                    </label>
+                                                </div><!-- react-text: 7 --> <!-- /react-text -->
+                                            </div><div class="ais-refinement-list--item facet-value radio">
+                                                <div>
+                                                    <input type="radio" class="luong" name="jobSalary" value="500-1000">
+                                                    <label class="ais-refinement-list--label col-sm-9 col-md-10">
+                                                        500 - 1000
+                                                    </label>
+                                                </div><!-- react-text: 10 --> <!-- /react-text -->
+                                            </div><div class="ais-refinement-list--item facet-value radio">
+                                                <div>
+                                                    <input type="radio" class="luong" name="jobSalary" value="1000-1500">
+                                                    <label class="ais-refinement-list--label col-sm-9 col-md-10">
+                                                        1000 - 1500
+                                                    </label>
+                                                </div><!-- react-text: 13 --> <!-- /react-text -->
+                                            </div><div class="ais-refinement-list--item facet-value radio">
+                                                <div>
+                                                    <input type="radio" class="luong" name="jobSalary" value="1500-2000">
+                                                    <label class="ais-refinement-list--label col-sm-9 col-md-10">
+                                                        1500 - 2000
+                                                    </label>
+                                                </div><!-- react-text: 16 --> <!-- /react-text -->
+                                            </div><div class="ais-refinement-list--item facet-value radio">
+                                                <div>
+                                                    <input type="radio" class="luong" name="jobSalary" value="2000-3000">
+                                                    <label class="ais-refinement-list--label col-sm-9 col-md-10">
+                                                        2000 - 3000
+                                                    </label>
+                                                </div><!-- react-text: 19 --> <!-- /react-text -->
+                                            </div><div class="ais-refinement-list--item facet-value radio">
+                                                <div>
+                                                    <input type="radio" class="luong" name="jobSalary" value="3000">
+                                                    <label class="ais-refinement-list--label col-sm-9 col-md-10">
+                                                        ≥ 3000
+                                                    </label>
+                                                </div><!-- react-text: 22 --> <!-- /react-text -->
+                                            </div><!-- react-text: 23 --> <!-- /react-text -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="main-job-list" class="col-sm-9 col-md-6 col-lg-8 job-search__main-job-list">
+
+                    <div class="job-search-body" data-original-title="" title="">
+                        <div class="job-list">
+                            <!-- Top Info -->
+                            <div class="box m-b-none">
+                                <div class="job-search__top-nav top-nav">
+                                    <!-- Filter Bar-->
+                                    <div class="row">
+                                        <!-- Stats -->
+                                        <div class="col-xs-12 col-md-12 col-lg-5">
+                                            <div class="pull-left result-no">
+                                                <div id="stats-container" class="job-search__stats">
+                                                    <div data-reactroot="" class="ais-root ais-stats">
+                                                        <div class="ais-body ais-stats--body">
+                                                            <div id="countTin">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Sort -->
+                                        <div class="col-xs-12 col-md-12 col-lg-7">
+                                            <div class="row">
+                                                <!--Sorter-->
+                                                <div class="col-sm-7 job-sorter-col ">
+                                                    <div class="job-search__job-sorter gray-light m-t-sm">
+                                                        <span class="job-search__job-sorter-close visible-xs icon-light-close-button"></span>
+                                                        <div class="clearfix">
+                                                            <span class="pull-left hidden-xs m-r-xs job-search__job-sorter-label">Xếp theo:</span>
+                                                            <div class="pull-left" id="sort-by-selector">
+                                                                <div data-reactroot="">
+                                                                    <label class="inline clickable active">
+                                                                        Ngày
+                                                                        <input type="radio" hidden="" name="radio-sort" value="date">
+                                                                        <span class="separator">|</span>
+                                                                    </label>
+                                                                    <label class="inline clickable">
+                                                                        Lương
+                                                                        <input type="radio" hidden="" name="radio-sort" value="salary">
+                                                                        <span class="separator">|</span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--Saved Jobs -->
+                                                <div class="col-sm-5 text-right job-search__saved-jobs hidden-xs">
+                                                    <div id="job-search__saved-jobs">
+                                                        <span data-reactroot="" class="inline m-t-sm text-light">
+                                                            Chưa lưu việc nào
+                                                            <span class="saved-heart-wrapper inline">
+                                                                <i class="fa fa-heart-o fa-lg m-l-xs"></i>
+                                                            </span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/ Top Info -->
+                            <div id="job-list">
+                                <div data-reactroot="" class="ais-hits">
+                                    <div class="job-list" id="job-list">
+                                        <div class="box box-sm p-t-none p-b-none ">
+                                            <div class="box-top-level clearfix" id="tblData">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pagination -->
+                            <div class="text-center box box-sm m-t-n">
+                                <div id="pagination-container">
+                                    <div data-reactroot>
+                                        <div id="pagination" class="pagination">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/ Pagination -->
+                        </div>
+                        <!-- Course Info-->
+                        <div class="border border-success box box-lg m-t" id="courseInfo">
+                            <div class="courseDetail">
+                                <div class="row">
+                                    <div class="col-sm-9">
+                                        <h3>ĐH Lunghwa Tuyển Sinh Thạc Sỹ Quản Lý Thông Tin</h3>
+                                        <strong>Học Tại Hà Nội.</strong>
+                                        <div class="push-top-sm">
+                                            <p><i class="fa fa-check text-success"></i> Bằng cấp quốc tế.</p>
+                                            <p><i class="fa fa-check text-success"></i> Không cần thi tuyển đầu vào.</p>
+                                            <p><i class="fa fa-check text-success"></i> Học phí toàn khóa học chỉ có 135 triệu.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <img class="pull-right" src="/assets/client/images.vietnamworks.com/logo/ieru1IQha.gif" width="130">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4 push-top-xs">
+                                        <button class="btn btn-sm btn-success" id="btnFindOut">Đăng ký ngay!</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="sidebar" class="col-md-3 col-lg-2 hidden-sm hidden-xs job-search__sidebar">
+                    <div>
+                        <div class="box box-xs job-search__sidebar-ja" id="sidebar-ja"><div data-reactroot=""><h2 class="hidden-xs">THÔNG BÁO VIỆC LÀM</h2><p>Tạo và nhận thông báo qua email khi có công việc mới phù hợp.</p><a class="btn btn-outline btn-primary full-width job-search__btn-create-job-alert clickable">Tạo thông báo việc làm</a><!-- react-text: 5 --> <!-- /react-text --></div></div>
+                        <!-- Advertisement -->
+                        <div class="box box-sm">
+                            <div class="sidebar-banner">
+                                <!-- Advertisement -->
+                                <div class="banner-ver">
+                                    <div id="ads_RIGHT_ADV_JS_SEARCHRESULT" style="clear:both;">
+                                        <div style="position:relative;"><table id="adc_RIGHT_ADV_JS_SEARCHRESULT" pan_timer="5" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><a href="http://topit.vietnamworks.com/techexpo?utm_source=display&amp;utm_medium=ASRP&amp;utm_content=concept&amp;utm_campaign=TECHEXPO2017" target="_blank"><img src="https://images.vietnamworks.com/logo/160x600_101353.jpg" width="160" height="600" alt="" title="" border="0"></a></td></tr></tbody></table></div>
+                                    </div>
+                                </div>
+                                <div class="banner-square">
+                                    <div class="banner">
+                                        <div id="ads_LEFT" style="clear:both;">
+                                            <div style="position:relative;">
+                                                <table id="adc_LEFT">
+                                                    <tbody>
+                                                        <tr class="ads_LEFT_FIRST"><td style="padding-top:5px;"><a class="cusLogo" target="_blank" href="https://www.vietnamworks.com/chuong-trinh-tuyen-dung-12cfo-tuong-lai-1-1-807425-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=ADR_TOPICACFO" style="display: none;"><img src="https://images.vietnamworks.com/logo/(5)-topica-220x165_101354.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/medical-secretary-3-805730-jv/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_VIETPHAPHOSPITAL" style="display: none;"><img src="https://images.vietnamworks.com/logo/Vietphap_220x165_3_101319.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/truong-phong-hcns-28-805338-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_OCD" style="display: none;"><img src="https://images.vietnamworks.com/logo/(1)-ocd-220x165_101311.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="http://topica.vietnamworks.com/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=ADR_TOPICA" style="display: none;"><img src="https://images.vietnamworks.com/logo/220x165_101262.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/php-team-leader-17-808928-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_RAKUS" style="display: none;"><img src="https://images.vietnamworks.com/logo/rakus_220x165_101347.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="http://ca-adv.vietnamworks.com/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=ADR_CAADVANCE" style="display: block;"><img src="https://images.vietnamworks.com/logo/220x165_101307.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/ky-su-quan-ly-thiet-bi-tai-ha-nam-809353-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_TRANSMECO" style="display: none;"><img src="https://images.vietnamworks.com/logo/(2)-transmeco-220x165_101366.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="http://topica.vietnamworks.com/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=ADR_TOPICA" style="display: none;"><img src="https://images.vietnamworks.com/logo/Topica-220x165_101290.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/giam-doc-xuat-nhap-khau-tap-doan-806875-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_KANGAROO" style="display: none;"><img src="https://images.vietnamworks.com/logo/(1)-kangaroo-220x165_101356.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/nhan-vien-kinh-doanh-ban-hang-ky-thuat-thu-nhap-15-25-trieu-thang-1-807034-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_DUCMINH" style="display: none;"><img src="https://images.vietnamworks.com/logo/Duc-Minh-220x165_2_101336.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="http://olympusvn.vietnamworks.com/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=ADR_OLYMPUSVN" style="display: none;"><img src="https://images.vietnamworks.com/logo/(1)-olympus-220x165_101385.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/operation-and-customer-care-manager-quan-ly-van-hanh-va-cskh-810852-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_WEGO" style="display: none;"><img src="https://images.vietnamworks.com/logo/(1)-wego24-220x165_101369.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://docs.google.com/forms/d/1S5mwLvSrk5X4dmGwVfDKSPmpdg5z9o7T2qVKM1T6ApI/edit" style="display: none;"><img src="https://images.vietnamworks.com/logo/DHQGHN_220x165_101269.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/chuong-trinh-tuyen-dung-12cfo-tuong-lai-1-1-807425-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=ADR_TOPICACFO" style="display: none;"><img src="https://images.vietnamworks.com/logo/(5)-topica-220x165_101355.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/nhan-vien-kinh-doanh-ban-hang-ky-thuat-thu-nhap-15-25-trieu-thang-1-807034-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_DUCMINH" style="display: none;"><img src="https://images.vietnamworks.com/logo/Duc-Minh-220x165_101334.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/experienced-sales-educational-consultant-thu-nhap-hap-dan-1-1-1-1-809885-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_WALLSTREET" style="display: none;"><img src="https://images.vietnamworks.com/logo/WTE-220-x-165-(3)_101359.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/business-development-executive-based-in-hcmc-806386-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_TRADELINK" style="display: none;"><img src="https://images.vietnamworks.com/logo/(2)-tradelink-220x165_101337.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/giam-doc-xuat-nhap-khau-tap-doan-806875-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_KANGAROO" style="display: none;"><img src="https://images.vietnamworks.com/logo/(1)-kangaroo-220x165_101358.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/sales-advisor-4-805691-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=ADR_HM" style="display: none;"><img src="https://images.vietnamworks.com/logo/H&amp;M_220x615_2_101302.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/l-oreal-vietnam-management-trainee-program-2017-806923-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_LOREAL" style="display: none;"><img src="https://images.vietnamworks.com/logo/Loreal_220x165_101314.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/nhan-vien-kinh-doanh-ban-hang-ky-thuat-thu-nhap-15-25-trieu-thang-1-807034-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_DUCMINH" style="display: none;"><img src="https://images.vietnamworks.com/logo/Duc-Minh-220x165_101335.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/nhan-vien-kinh-doanh-tu-van-tai-chinh-doanh-nghiep-luong-den-1000-1-1-807249-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_CHAILEASE" style="display: none;"><img src="https://images.vietnamworks.com/logo/CHAILEASE_220x165_101321.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLSco6Rho9_GRZ9KzUz9gkH--4s4FC2O01YtuppEj95qX1zwQIQ/viewform" style="display: none;"><img src="https://images.vietnamworks.com/logo/220x165_101344.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/sales-advisor-4-805691-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=ADR_HM" style="display: none;"><img src="https://images.vietnamworks.com/logo/H&amp;M_220x615_2_101300.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/truong-phong-marketing-335-805733-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_THHDECOR" style="display: none;"><img src="https://images.vietnamworks.com/logo/(1)-thh-220x165_101316.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/truong-ban-ke-hoach-dau-tu-809797-jv/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_PTTSVN" style="display: none;"><img src="https://images.vietnamworks.com/logo/VAD_220x165_1_101380.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://docs.google.com/forms/d/1S5mwLvSrk5X4dmGwVfDKSPmpdg5z9o7T2qVKM1T6ApI/edit" style="display: none;"><img src="https://images.vietnamworks.com/logo/DHQGHN_220x165_101267.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/truong-ban-ke-hoach-dau-tu-809797-jv/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_PTTSVN" style="display: none;"><img src="https://images.vietnamworks.com/logo/VAD_220x165_1_101378.gif" width="220" height="165"></a></td></tr>
+                                                        <tr class="ads_LEFT_SECOND"><td style="padding-top:5px;"><a class="cusLogo" target="_blank" href="https://www.vietnamworks.com/l-oreal-vietnam-management-trainee-program-2017-806923-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_LOREAL" style="display: none;"><img src="https://images.vietnamworks.com/logo/Loreal_220x165_101315.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/medical-secretary-3-805730-jv/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_VIETPHAPHOSPITAL" style="display: none;"><img src="https://images.vietnamworks.com/logo/Vietphap_220x165_3_101320.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/sales-advisor-4-805691-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=ADR_HM" style="display: none;"><img src="https://images.vietnamworks.com/logo/H&amp;M_220x615_2_101301.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="http://ca-adv.vietnamworks.com/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=ADR_CAADVANCE" style="display: none;"><img src="https://images.vietnamworks.com/logo/220x165_2_101310.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/truong-phong-hcns-28-805338-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_OCD" style="display: none;"><img src="https://images.vietnamworks.com/logo/(1)-ocd-220x165_101312.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://docs.google.com/forms/d/1S5mwLvSrk5X4dmGwVfDKSPmpdg5z9o7T2qVKM1T6ApI/edit" style="display: none;"><img src="https://images.vietnamworks.com/logo/DHQGHN_220x165_101268.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/php-team-leader-17-808928-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_RAKUS" style="display: none;"><img src="https://images.vietnamworks.com/logo/rakus_220x165_2_101348.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="http://ca-adv.vietnamworks.com/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=ADR_CAADVANCE" style="display: none;"><img src="https://images.vietnamworks.com/logo/220x165_2_101309.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/truong-ban-quan-ly-du-an-38-809792-jv/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_PTTSVN2" style="display: none;"><img src="https://images.vietnamworks.com/logo/VAD_220x165_3_101383.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/truong-ban-ke-hoach-dau-tu-809797-jv/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_PTTSVN" style="display: none;"><img src="https://images.vietnamworks.com/logo/VAD_220x165_1_101379.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/truong-phong-marketing-335-805733-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_THHDECOR" style="display: none;"><img src="https://images.vietnamworks.com/logo/(1)-thh-220x165_101317.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLSco6Rho9_GRZ9KzUz9gkH--4s4FC2O01YtuppEj95qX1zwQIQ/viewform" style="display: none;"><img src="https://images.vietnamworks.com/logo/220x165_3_101346.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLSco6Rho9_GRZ9KzUz9gkH--4s4FC2O01YtuppEj95qX1zwQIQ/viewform" style="display: none;"><img src="https://images.vietnamworks.com/logo/220x165_2_101345.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/truong-ban-kinh-doanh-va-quan-ly-tai-san-809793-jv/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_PTTSVN1" style="display: none;"><img src="https://images.vietnamworks.com/logo/VAD_220x165_2_101381.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/giam-doc-xuat-nhap-khau-tap-doan-806875-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_KANGAROO" style="display: none;"><img src="https://images.vietnamworks.com/logo/(1)-kangaroo-220x165_101357.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="http://olympusvn.vietnamworks.com/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=ADR_OLYMPUSVN" style="display: none;"><img src="https://images.vietnamworks.com/logo/(1)-olympus-220x165_101386.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="http://topica.vietnamworks.com/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=ADR_TOPICA" style="display: none;"><img src="https://images.vietnamworks.com/logo/Topica-220x165_101292.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://docs.google.com/forms/d/1S5mwLvSrk5X4dmGwVfDKSPmpdg5z9o7T2qVKM1T6ApI/edit" style="display: none;"><img src="https://images.vietnamworks.com/logo/DHQGHN_220x165_2_101270.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/experienced-sales-educational-consultant-thu-nhap-hap-dan-1-1-1-1-809885-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_WALLSTREET" style="display: none;"><img src="https://images.vietnamworks.com/logo/WTE-220-x-165-(3)_101360.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/ky-su-quan-ly-thiet-bi-tai-ha-nam-809353-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_TRANSMECO" style="display: block;"><img src="https://images.vietnamworks.com/logo/(2)-transmeco-220x165_101367.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/sales-advisor-4-805691-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=ADR_HM" style="display: none;"><img src="https://images.vietnamworks.com/logo/H&amp;M_220x615_2_101303.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="http://ca-adv.vietnamworks.com/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=ADR_CAADVANCE" style="display: none;"><img src="https://images.vietnamworks.com/logo/220x165_101308.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="http://topica.vietnamworks.com/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=ADR_TOPICA" style="display: none;"><img src="https://images.vietnamworks.com/logo/Topica-220x165_101293.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/nhan-vien-kinh-doanh-tu-van-tai-chinh-doanh-nghiep-luong-den-1000-1-1-807249-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_CHAILEASE" style="display: none;"><img src="https://images.vietnamworks.com/logo/CHAILEASE_220x165_101322.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/truong-ban-quan-ly-du-an-38-809792-jv/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_PTTSVN2" style="display: none;"><img src="https://images.vietnamworks.com/logo/VAD_220x165_3_101384.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/truong-ban-kinh-doanh-va-quan-ly-tai-san-809793-jv/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_PTTSVN1" style="display: none;"><img src="https://images.vietnamworks.com/logo/VAD_220x165_2_101382.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/business-development-executive-based-in-hcmc-806386-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_TRADELINK" style="display: none;"><img src="https://images.vietnamworks.com/logo/(2)-tradelink-220x165_101339.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="https://www.vietnamworks.com/operation-and-customer-care-manager-quan-ly-van-hanh-va-cskh-810852-jd/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=STURBO_WEGO" style="display: none;"><img src="https://images.vietnamworks.com/logo/(1)-wego24-220x165_101370.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="http://topica.vietnamworks.com/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=ADR_TOPICA" style="display: none;"><img src="https://images.vietnamworks.com/logo/220x165_101263.gif" width="220" height="165"></a><a hidden="" class="cusLogo" target="_blank" href="http://topica.vietnamworks.com/?utm_source=display&amp;utm_medium=ASRP&amp;utm_campaign=ADR_TOPICA" style="display: none;"><img src="https://images.vietnamworks.com/logo/Topica-220x165_101291.gif" width="220" height="165"></a></td></tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end Advertisement -->
+                    </div>
+                </div>
+            </div>
+            <!-- Advertisement -->
+            <div class="banner-horizontal text-center m-b-lg m-t-lg">
+                <!-- Advertisement -->
+                <div id="ads_BOTTOM" style="clear:both;">
+                    <div style="position:relative;">
+                        <table id="adc_BOTTOM" border="0" cellpadding="5" cellspacing="5" align="center">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <a href="https://www.vietnamworks.com/di-dong?utm_source=vnw_searchresult&amp;utm_medium=srbottombanner&amp;utm_campaign=MOBILEAPP&amp;utm_content=banner2" target="_blank"><img src="https://images.vietnamworks.com/logo/(5)-mobile-720x90_101350.gif" width="720" height="90" alt="" title="" border="0"></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- end Advertisement -->
+        </div>
+    </div>
+
+    <script id="data-template" type="x-tmpl-mustache">
+        <div class="job-item" data-job-id="{{Id}}">
+            <div class="relative">
+                <div class="row">
+                    <div class="col-xs-3 col-sm-3 col-lg-2 job-search__logo-col">
+                        <div class="logo job-search__logo">
+                            <a href="{{Url}}" target="_blank">
+                                <img title="{{TenCongTy}}" class="img-responsive" src="{{Logo}}">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-lg-9 job-search__job-info-col">
+                        <div class="job-item-info relative">
+                            <!-- Job Title -->
+                            <h3>
+                                <a href="{{Url}}" class="job-title" target="_blank">{{ChucDanh}}</a>
+                            </h3>
+
+                            <div class="company text-clip">
+                                <span class="job-search__company" title="{{TenCongTy}}">{{TenCongTy}}</span>
+                                <span class="hidden-xs text-gray-a separator">|</span>
+                                <span class="job-search__location">{{DiaChi}}</span>
+                            </div>
+                            <div class="extra-info salary text-clip">
+                                {{#isAuthenticated}}
+                                <a href="/jobseekers/checkAuthenticate.php?lang=1">Đăng nhập để xem mức lương</a>
+                                {{/isAuthenticated}}
+                                {{^isAuthenticated}}
+                                {{#thuongluong}}
+                                <span class="text-primary">Thương lượng</span>
+                                {{/thuongluong}}
+                                {{^thuongluong}}
+                                <span class="text-primary">${{TuLuong}} - ${{DenLuong}}</span>
+                                {{/thuongluong}}
+                                {{/isAuthenticated}}
+
+                                <span class="separator">
+                                    |
+                                </span>
+                                <span class="job-search__date-posted gray-light">
+                                    {{#homnay}}
+                                    Hôm nay
+                                    {{/homnay}}
+                                    {{^homnay}}
+                                    {{NgayDang}}
+                                    {{/homnay}}
+
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-1 col-sm-1 col-lg-1">
+                        <div class="job-search__save-job text-right">
+                            <label for="checkbox812183">
+                                <i class="fa fa-heart-o"></i>
+                                <input hidden="" type="checkbox" class="save-job" id="checkbox812183">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+</div>

@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<html lang="vi" class="vnw-home">
+<head>
+    <link rel="shortcut icon" href="https://advice.vietnamworks.com/misc/favicon.ico" type="image/x-icon" />
+    <title>Việc làm & Tuyển dụng - Tìm việc làm mới tại VietnamWorks</title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,300&subset=latin,latin-ext,vietnamese' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/assets/client/css/jobseekers/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/assets/client/css/jobseekers/theme.css">
+    <script type="text/javascript" src="/assets/client/js/bundle/home/plugins.js"></script>
+    <script type="text/javascript">
+        jQuery.curCSS = jQuery.css;
+        var base_url = 'https://www.vietnamworks.com/';</script>
+    <link rel="canonical" href="https://www.vietnamworks.com/vi/" />
+    <script type="text/javascript" src="/assets/client/js/jobseekers/onesignal-integration.js"></script>
+
+</head>
+<body>
+
+    <div class="vnw_download_app vnw_download_app_vi animated fixedBannerApp" style="display: none">
+        <div class="row">
+            <div class="col-xs-1">
+                <a class="close_vnw_download_app_alert"></a>
+            </div>
+            <div class="col-xs-11 text-right pull-right">
+                <a href="#" class="btn install_vwn_app m-xs btn_download_vi btn_android_download">XEM</a>
+            </div>
+        </div>
+    </div>
+    <div data-role="page">
+        <!-- Header -->
+        <header>
+            @{ Html.RenderAction("Header", "Home");}
+        </header><!-- Modal Menu -->
+        <div class="modal fade modal-menu" id="modal-menu" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" class="close absolute" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <ul>
+                            <li class="menu-header">&nbsp;</li>
+                            <li>
+                                <a class="language-switcher clickable" href="javascript: changLanguage(2);">
+                                    <i class="fa fa-fw fa-lg fa-globe"></i>
+                                    <span class="chosen-language">English</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/cong-ty">
+                                    <i class="fa fa-lg fa-fw fa-building"></i>
+                                    <span>Công Ty <span class="label label-sm label-danger m-t-n-sm label__new-tag">MỚI</span></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a target="_blank" href="http://hrinsider.vietnamworks.com/category/nguoi-tim-viec/">
+                                    <i class="fa fa-lg fa-fw fa-info-circle"></i>
+                                    <span>Tư Vấn</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/bao-mat">
+                                    <i class="fa fa-lg fa-fw fa-shield"></i>
+                                    <span>Bảo Mật</span>
+                                </a>
+                            </li>
+                            <li class="user-profile row">
+                                <div class="col-xs-12">
+                                    <div class="text-lg name">
+                                        <strong>Lê Khanh</strong>
+                                    </div>
+                                    <a href="/ho-so" class="btn btn-primary">
+                                        Hồ Sơ Việc Làm
+                                    </a>
+                                </div>
+                            </li>
+                            <li>
+                                <a href="/quan-ly-nghe-nghiep/tai-khoan"><i class="fa fa-fw fa-lg fa-user"></i>Thông Tin Tài Khoản</a>
+                            </li>
+                            <li>
+                                <a href="/quan-ly-nghe-nghiep/viec-lam-cua-toi"><i class="fa fa-fw fa-lg fa-heart"></i>Việc Làm Của Tôi</a>
+                            </li>
+                            <li>
+                                <a href="/quan-ly-nghe-nghiep/thong-bao-viec-lam"><i class="fa fa-fw fa-lg fa-envelope"></i>Thông Báo Việc Làm</a>
+                            </li>
+                            <li>
+                                <a href="/quan-ly-nghe-nghiep/phan-hoi-cua-nha-tuyen-dung"><i class="fa fa-fw fa-lg fa-comments-o"></i>Phản Hồi</a>
+                            </li>
+                            <li>
+                                <a href="/quan-ly-nghe-nghiep/nha-tuyen-dung-nao-xem-ho-so-cua-ban">
+                                    <i class="fa fa-fw fa-lg fa-eye"></i>Nhà Tuyển Dụng Xem
+                                    Hồ Sơ
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/thoat"><i class="fa fa-fw fa-lg fa-sign-out"></i>Thoát</a>
+                            </li>
+                            <li class="horizontal-navbar__employer-site">
+                                <a target="_blank" href="https://employer.vietnamworks.com/?lang=2">
+                                    <strong class="text-white">
+                                        NHÀ TUYỂN
+                                        DỤNG
+                                    </strong><br />
+                                    <span class="text-white">Đăng Tuyển & Kiếm Nhân Tài</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Notification Popover Content -->
+        <div class="popover hidden notification-popover" id="notification-popover" role="tooltip">
+            <div class="arrow"></div>
+            <h3 class="popover-title">Thông Báo</h3>
+            <div class="popover-content">
+                <div class="notification-item">
+                    <div>
+                        <span class="notification-item__label label label-sm label-danger">HOT</span>
+                        <a href="/viec-lam-goi-y">Có <strong>18 vị trí</strong> mới hấp dẫn cho bạn</a>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <div>
+                        <i class="fa fa-info-circle fa-fw"></i>
+                        <a href="/ho-so">Cập nhật hồ sơ để tìm công việc tốt dễ dàng hơn</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ Notification Popover Content -->
+
+        @RenderBody()
+
+        <!-- Footer -->
+        <footer>
+            @{ Html.RenderAction("Footer", "Home");}
+        </footer>
+
+        <script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"> </script>
+        <script type="text/javascript" src="/Assets/client/js/jquery-ui.js"></script>
+         @*<script type="text/javascript" src="/assets/client/js/bundle/home/ui.js"></script>*@
+        @RenderSection("footerJS", required: false)
+    </div>
+</body>
+</html>

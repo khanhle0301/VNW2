@@ -1,0 +1,6 @@
+﻿@model IEnumerable<MyShop.Web.Models.NganhNgheViewModel>
+
+@foreach (var item in Model)
+{
+    <option value="@item.Alias-@item.Id">@item.Ten</option>
+}
